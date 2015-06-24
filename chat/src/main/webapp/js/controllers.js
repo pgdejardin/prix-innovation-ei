@@ -13,6 +13,7 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
       transport: 'websocket',
       messages: []
     };
+    $scope.map = {center: {latitude: 45, longitude: -73}, zoom: 8};
 
     var socket;
 

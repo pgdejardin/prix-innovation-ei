@@ -1,7 +1,11 @@
 .time {
-    color: lightgray;
+  color: lightgray;
 }
 
 .author {
-    font-weight: bold;
+  font-weight: bold;
+}
+
+.angular-google-map-container {
+  height: 400px;
 }

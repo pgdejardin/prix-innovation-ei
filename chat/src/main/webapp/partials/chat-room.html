@@ -1,39 +1,48 @@
 <!--suppress HtmlUnknownAnchorTarget -->
 <div class="container">
-    <div id="header">
-        <h3>Salon de discussion {{model.room}}</h3>
-        <a href="#/chat-room-choice">Retour aux choix du salon</a>
+  <div id="header">
+    <h3>Salon de discussion {{model.room}}</h3>
+    <a href="#/chat-room-choice">Retour aux choix du salon</a>
+  </div>
+
+  <p ng-show="!model.connected">Connecting...</p>
+
+  <p>{{model.content}}</p>
+
+  <div class="row">
+    <div class="col-md-12">
+      <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
     </div>
+  </div>
 
-    <p ng-show="!model.connected">Connecting...</p>
-
-    <p>{{model.content}}</p>
-
-    <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Chat room</h3>
-            </div>
-            <div class="panel-body">
-                <div class="messages">
-                    <p ng-repeat="message in model.messages">
-                        <span class="time">{{message.date | date:'dd/MM/yyyy HH:mm'}}</span>
-                        <span class="author">{{message.author}}</span> :
-                        <span class="text">{{message.text}}</span>
-                    </p>
-                </div>
-            </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Chat room</h3>
         </div>
+        <div class="panel-body">
+          <div class="messages">
+            <p ng-repeat="message in model.messages">
+              <span class="time">{{message.date | date:'dd/MM/yyyy HH:mm'}}</span>
+              <span class="author">{{message.author}}</span> :
+              <span class="text">{{message.text}}</span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-    <span ng-show="!!model.name">
-        <b>{{model.name}}</b> says:
-    </span>
+  </div>
 
-    <form role="form" class="form-horizontal">
-        <div class="form-group">
-            <div class="col-lg-9">
-                <input type="text" class="form-control" id="input" ng-keypress="keypress($event)" ng-disabled="!model.connected" ng-model="model.message" title="message"/>
-            </div>
-        </div>
-    </form>
+  <span ng-show="model.name">
+    <b>{{model.name}}</b> says:
+  </span>
+
+  <form role="form" class="form-horizontal">
+    <div class="form-group">
+      <div class="col-lg-12">
+        <input type="text" class="form-control" id="input" ng-keypress="keypress($event)" ng-disabled="!model.connected" ng-model="model.message" title="message"/>
+      </div>
+    </div>
+  </form>
 </div>
