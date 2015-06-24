@@ -5,7 +5,29 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
 
   var controllersModule = angular.module('myApp.controllers', []);
 
-  controllersModule.controller('ChatRoomController', ['$scope', '$routeParams', 'UserService', 'AtmosphereService', function($scope, $routeParams, UserService, AtmosphereService) {
+  controllersModule.controller('ChatRoomController', ['$scope', '$routeParams', 'uiGmapGoogleMapApi', 'UserService', 'AtmosphereService', function($scope, $routeParams, uiGmapGoogleMapApi,
+                                                                                                                                                   UserService, AtmosphereService) {
+
+    uiGmapGoogleMapApi.then(function(maps) {
+      if (navigator.geolocation) {
+        console.debug('navigator.geolocation?:', navigator.geolocation);
+        navigator.geolocation.getCurrentPosition(function(position) {
+          console.debug('position:', position);
+          console.debug('maps', maps);
+          $scope.map.center.latitude = position.coords.latitude;
+          $scope.map.center.longitude = position.coords.longitude;
+          $scope.marker = {
+            id: 0,
+            coords: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            },
+            options: {draggable: false}
+          };
+          //var pos = maps.LatLng(position.coords.latitude, position.coords.longitude);
+        });
+      }
+    });
 
     $scope.model = {
       room: $routeParams.room,
@@ -13,7 +35,21 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
       transport: 'websocket',
       messages: []
     };
-    $scope.map = {center: {latitude: 45, longitude: -73}, zoom: 8};
+
+
+    $scope.map = {
+      center: {
+        latitude: null,
+        longitude: null
+      },
+      zoom: 13,
+      events: {
+        click: function(mapModel, eventName, originalEventArgs) {
+          alert('action done');
+        }
+      }
+    };
+    $scope.marker = {};
 
     var socket;
 

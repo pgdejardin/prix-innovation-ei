@@ -11,7 +11,19 @@
 
   <div class="row">
     <div class="col-md-12">
-      <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+      <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+        <!--<ui-gmap-marker-->
+          <!--idKey='{expression}'-->
+          <!--coords='{expression}'-->
+          <!--icon='{expression}'-->
+          <!--click='{expression}'-->
+          <!--options='{expression}'-->
+          <!--events='{expression}'-->
+          <!--control='{expression}'>-->
+        <!--</ui-gmap-marker>-->
+        <ui-gmap-marker coords="marker.coords" options="marker.options" idkey="marker.id"></ui-gmap-marker>
+        <!--TODO: ng-repeat avec une liste de marker ???-->
+      </ui-gmap-google-map>
     </div>
   </div>
 
