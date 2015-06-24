@@ -1,0 +1,24 @@
+<div class="container">
+
+    <div id="header">
+        <h3>Choix du salon de discussion</h3>
+    </div>
+
+    <ul>
+        <li ng-repeat="room in rooms">
+            <a href="#/chat-room/{{room.name}}">{{room.name}}</a>
+        </li>
+        <li ng-if="rooms.length == 0">
+            <strong>Pas de salon de discussion</strong>
+        </li>
+    </ul>
+
+    <form>
+        <div class="form-group">
+            <label for="roomName">Nouveau salon de discussion</label>
+            <input id="roomName" name="roomName" ng-model="roomName" ng-keypress="createRoom($event)" type="text" class="form-control" placeholder="Entrer le nom du salon">
+        </div>
+    </form>
+    <button ng-click="createRoom($event)" ng-disabled="!(roomName.length > 0)" class="btn btn-primary">Créer</button>
+
+</div>
