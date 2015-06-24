@@ -1,3 +1,4 @@
+<!--suppress HtmlUnknownAnchorTarget -->
 <div class="container">
     <div id="header">
         <h3>Salon de discussion {{model.room}}</h3>
@@ -5,6 +6,7 @@
     </div>
 
     <p ng-show="!model.connected">Connecting...</p>
+
     <p>{{model.content}}</p>
 
     <div class="row">
@@ -26,10 +28,11 @@
     <span ng-show="!!model.name">
         <b>{{model.name}}</b> says:
     </span>
+
     <form role="form" class="form-horizontal">
         <div class="form-group">
             <div class="col-lg-9">
-                <input type="text" class="form-control" id="input" ng-keypress="keypress($event)" ng-disabled="!model.connected" ng-model="model.message"/>
+                <input type="text" class="form-control" id="input" ng-keypress="keypress($event)" ng-disabled="!model.connected" ng-model="model.message" title="message"/>
             </div>
         </div>
     </form>
