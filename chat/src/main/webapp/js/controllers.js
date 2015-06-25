@@ -9,24 +9,7 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
                                                                                                                                                    UserService, AtmosphereService) {
 
     uiGmapGoogleMapApi.then(function(maps) {
-      if (navigator.geolocation) {
-        console.debug('navigator.geolocation?:', navigator.geolocation);
-        navigator.geolocation.getCurrentPosition(function(position) {
-          console.debug('position:', position);
-          console.debug('maps', maps);
-          $scope.map.center.latitude = position.coords.latitude;
-          $scope.map.center.longitude = position.coords.longitude;
-          $scope.marker = {
-            id: 0,
-            coords: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            },
-            options: {draggable: false}
-          };
-          //var pos = maps.LatLng(position.coords.latitude, position.coords.longitude);
-        });
-      }
+
     });
 
     $scope.model = {
@@ -42,7 +25,7 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
         latitude: null,
         longitude: null
       },
-      zoom: 13,
+      zoom: 11,
       events: {
         click: function(mapModel, eventName, originalEventArgs) {
           alert('action done');
@@ -50,6 +33,62 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
       }
     };
     $scope.marker = {};
+    $scope.fakeMarkers = [
+      {
+        id: 2,
+        name: 'user-2',
+        coords: {
+          latitude: 48.6967513,
+          longitude: 2.302947
+        },
+        options: {
+          draggable: false,
+          title: 'user-2'
+        },
+        events: {
+          click: function(mapModel, eventName, originalEventArgs) {
+            console.debug('mapModel', mapModel);
+            console.debug('eventName', eventName);
+            console.debug('originalEventArgs', originalEventArgs);
+          }
+        }
+      },
+      {
+        id: 3,
+        name: 'user-3',
+        coords: {
+          latitude: 48.7967513,
+          longitude: 2.298547
+        },
+        options: {draggable: false}
+      }
+    ];
+
+    var init = function() {
+      if (navigator.geolocation) {
+        //console.debug('navigator.geolocation?:', navigator.geolocation);
+        navigator.geolocation.getCurrentPosition(function(position) {
+          console.debug('position.coords.latitude:', position.coords.latitude);
+          console.debug('position.coords.longitude:', position.coords.longitude);
+          $scope.map.center.latitude = position.coords.latitude;
+          $scope.map.center.longitude = position.coords.longitude;
+          $scope.marker = {
+            id: 1,
+            coords: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            },
+            options: {
+              draggable: false,
+              title: $scope.model.name
+            }
+          };
+          //var pos = maps.LatLng(position.coords.latitude, position.coords.longitude);
+        });
+      }
+    };
+
+    init();
 
     var socket;
 

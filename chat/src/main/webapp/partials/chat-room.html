@@ -10,7 +10,7 @@
   <p>{{model.content}}</p>
 
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12 col-md-10">
       <ui-gmap-google-map center='map.center' zoom='map.zoom'>
         <!--<ui-gmap-marker-->
           <!--idKey='{expression}'-->
@@ -23,9 +23,23 @@
         <!--</ui-gmap-marker>-->
         <ui-gmap-marker coords="marker.coords" options="marker.options" idkey="marker.id"></ui-gmap-marker>
         <!--TODO: ng-repeat avec une liste de marker ???-->
+        <div ng-repeat="fakeMarker in fakeMarkers">
+          <ui-gmap-marker coords="fakeMarker.coords" options="fakeMarker.options" idkey="fakeMarker.id" events="fakeMarker.events"></ui-gmap-marker>
+
+        </div>
       </ui-gmap-google-map>
     </div>
+    <div class="col-xs-12 col-md-2">
+      <ul>
+        <li>{{model.name}}</li>
+      </ul>
+      <ul ng-repeat="fakeMarker in fakeMarkers">
+        <li ng-bind="fakeMarker.name"></li>
+      </ul>
+    </div>
   </div>
+
+  <br/>
 
   <div class="row">
     <div class="col-md-12">
@@ -36,7 +50,7 @@
         <div class="panel-body">
           <div class="messages">
             <p ng-repeat="message in model.messages">
-              <span class="time">{{message.date | date:'dd/MM/yyyy HH:mm'}}</span>
+              <span class="time">[{{message.date | date:'dd/MM/yyyy HH:mm'}}] </span>
               <span class="author">{{message.author}}</span> :
               <span class="text">{{message.text}}</span>
             </p>
