@@ -21,11 +21,32 @@
           <!--events='{expression}'-->
           <!--control='{expression}'>-->
         <!--</ui-gmap-marker>-->
-        <ui-gmap-marker coords="marker.coords" options="marker.options" idkey="marker.id"></ui-gmap-marker>
+        <ui-gmap-marker coords="marker.coords" options="marker.options" idkey="marker.id">
+          <!--<ui-gmap-window-->
+            <!--coords='{expression}'-->
+            <!--show='{expression}'-->
+            <!--templateUrl='{expression}'-->
+            <!--templateParameter='{expression}'-->
+            <!--isIconVisibleOnClick='{expression}'-->
+            <!--closeClick='{expression}'-->
+            <!--options='{expression}'-->
+            <!--control='{expression}'>-->
+          <!--</ui-gmap-window>-->
+          <ui-gmap-window
+            coords='marker.coords'
+            show="false"
+            options="marker.info.options">
+          </ui-gmap-window>
+        </ui-gmap-marker>
         <!--TODO: ng-repeat avec une liste de marker ???-->
         <div ng-repeat="fakeMarker in fakeMarkers">
-          <ui-gmap-marker coords="fakeMarker.coords" options="fakeMarker.options" idkey="fakeMarker.id" events="fakeMarker.events"></ui-gmap-marker>
-
+          <ui-gmap-marker coords="fakeMarker.coords" options="fakeMarker.options" idkey="fakeMarker.id" events="fakeMarker.events">
+            <ui-gmap-window
+              coords='fakeMarker.coords'
+              show="false"
+              options="fakeMarker.info.options">
+            </ui-gmap-window>
+          </ui-gmap-marker>
         </div>
       </ui-gmap-google-map>
     </div>

@@ -38,7 +38,7 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
         id: 2,
         name: 'user-2',
         coords: {
-          latitude: 48.6967513,
+          latitude: 48.8967513,
           longitude: 2.302947
         },
         options: {
@@ -51,6 +51,11 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
             console.debug('eventName', eventName);
             console.debug('originalEventArgs', originalEventArgs);
           }
+        },
+        info: {
+          options: {
+            content: 'user : user-2'
+          }
         }
       },
       {
@@ -60,7 +65,15 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
           latitude: 48.7967513,
           longitude: 2.298547
         },
-        options: {draggable: false}
+        options: {
+          draggable: false,
+          title: 'user-3'
+        },
+        info: {
+          options: {
+            content: 'user : user-3'
+          }
+        }
       }
     ];
 
@@ -81,6 +94,11 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
             options: {
               draggable: false,
               title: $scope.model.name
+            },
+            info: {
+              options: {
+                content: 'user : ' + $scope.model.name
+              }
             }
           };
           //var pos = maps.LatLng(position.coords.latitude, position.coords.longitude);
