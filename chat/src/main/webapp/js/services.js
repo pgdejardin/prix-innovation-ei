@@ -54,6 +54,9 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
       },
       createRoom: function(roomName) {
         return $http.put('/rest/chat-room/' + roomName, null, {responseType: 'json'});
+      },
+      getUsers: function(roomName) {
+        return $http.get('/rest/chat-room/' + roomName + '/users');
       }
     };
   }]);

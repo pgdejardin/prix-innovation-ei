@@ -5,12 +5,12 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
 
   var controllersModule = angular.module('myApp.controllers', []);
 
-  controllersModule.controller('ChatRoomController', ['$scope', '$routeParams', 'uiGmapGoogleMapApi', 'UserService', 'AtmosphereService', function($scope, $routeParams, uiGmapGoogleMapApi,
-                                                                                                                                                   UserService, AtmosphereService) {
+  controllersModule.controller('ChatRoomController', ['$scope', '$routeParams', 'uiGmapGoogleMapApi', 'UserService', 'AtmosphereService', 'ChatRoomService',
+    function($scope, $routeParams, uiGmapGoogleMapApi, UserService, AtmosphereService, ChatRoomService) {
 
-    uiGmapGoogleMapApi.then(function(maps) {
-
-    });
+    //uiGmapGoogleMapApi.then(function(maps) {
+    //
+    //});
 
     $scope.model = {
       room: $routeParams.room,
@@ -78,6 +78,13 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
     ];
 
     var init = function() {
+
+      ChatRoomService.getUsers($routeParams.room).success(function(res) {
+        console.debug(res);
+      }).error(function(err) {
+        console.error(err);
+      });
+
       if (navigator.geolocation) {
         //console.debug('navigator.geolocation?:', navigator.geolocation);
         navigator.geolocation.getCurrentPosition(function(position) {

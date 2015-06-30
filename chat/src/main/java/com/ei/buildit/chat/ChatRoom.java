@@ -2,7 +2,10 @@ package com.ei.buildit.chat;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,35 +13,46 @@ import java.util.List;
 @XmlRootElement
 public class ChatRoom implements Serializable {
 
-    private String name;
+  private String name;
 
-    private List<ChatMessage> messages =  new ArrayList<>();
+  private List<ChatMessage> messages = new ArrayList<>();
 
-    public ChatRoom() {
-    }
+  private List<User> users = new ArrayList<>();
 
-    public ChatRoom(String name) {
-        this.name = name;
-    }
+  public ChatRoom() {
+  }
 
-    @XmlID
-    @XmlElement
-    public String getName() {
-        return name;
-    }
+  public ChatRoom(String name) {
+    this.name = name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  @XmlID
+  @XmlElement
+  public String getName() {
+    return name;
+  }
 
-    @JsonIgnore
-    @XmlTransient
-    public List<ChatMessage> getMessages() {
-        return messages;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setMessages(List<ChatMessage> messages) {
-        this.messages = messages;
-    }
+  @JsonIgnore
+  @XmlTransient
+  public List<ChatMessage> getMessages() {
+    return messages;
+  }
 
+  public void setMessages(List<ChatMessage> messages) {
+    this.messages = messages;
+  }
+
+  @JsonIgnore
+  @XmlTransient
+  public List<User> getUsers() {
+    return users;
+  }
+
+  public void setUsers(List<User> users) {
+    this.users = users;
+  }
 }
