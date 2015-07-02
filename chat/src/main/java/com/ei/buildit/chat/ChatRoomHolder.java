@@ -60,4 +60,11 @@ public class ChatRoomHolder {
       chatRoom.getUsers().add(user);
     }
   }
+
+  public void removeUserToRoom(String roomName, String uuid) {
+    ChatRoom chatRoom = getChatRoom(roomName);
+    if (chatRoom != null) {
+      chatRoom.getUsers().remove(new User(uuid));
+    }
+  }
 }

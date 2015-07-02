@@ -39,4 +39,12 @@ public class ChatRoomResource {
     cache.addUserToRoom(room, user);
     return Response.ok().build();
   }
+
+  @POST
+  @Path("/{room}/remove")
+  public Response removeUserToRoom(@PathParam("room") String room, User user) {
+    cache.removeUserToRoom(room, user);
+    return Response.ok().build();
+  }
+
 }

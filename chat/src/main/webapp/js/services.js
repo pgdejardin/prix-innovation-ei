@@ -57,6 +57,15 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
       },
       getUsers: function(roomName) {
         return $http.get('/rest/chat-room/' + roomName + '/users');
+      },
+      removeUser: function(userName, roomName) {
+        return $http.post('/rest/chat-room/' + roomName + '/remove', {username: userName} )
+      },
+      addUserToRoom: function(userName, uuid, roomName) {
+        return $http.post('/rest/chat-room/' + roomName + '/user', {uuid:uuid, username: userName});
+      },
+      updateUserToRoom: function(userName, roomName) {
+        return $http.post('/rest/chat-room/' + roomName + '/update', {username: userName});
       }
     };
   }]);

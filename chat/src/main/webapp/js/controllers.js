@@ -5,194 +5,204 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
 
   var controllersModule = angular.module('myApp.controllers', []);
 
-  controllersModule.controller('ChatRoomController', ['$scope', '$routeParams', 'uiGmapGoogleMapApi', 'UserService', 'AtmosphereService', 'ChatRoomService',
-    function($scope, $routeParams, uiGmapGoogleMapApi, UserService, AtmosphereService, ChatRoomService) {
+  controllersModule.controller('ChatRoomController', ['$scope', '$routeParams', '$interval', 'uiGmapGoogleMapApi', 'UserService', 'AtmosphereService', 'ChatRoomService',
+    function($scope, $routeParams, $interval, uiGmapGoogleMapApi, UserService, AtmosphereService, ChatRoomService) {
 
-    //uiGmapGoogleMapApi.then(function(maps) {
-    //
-    //});
+      //uiGmapGoogleMapApi.then(function(maps) {
+      //
+      //});
 
-    $scope.model = {
-      room: $routeParams.room,
-      name: UserService.getUser(),
-      transport: 'websocket',
-      messages: []
-    };
+      $scope.model = {
+        room: $routeParams.room,
+        name: UserService.getUser(),
+        transport: 'websocket',
+        messages: []
+      };
+      $scope.users = [];
 
-
-    $scope.map = {
-      center: {
-        latitude: null,
-        longitude: null
-      },
-      zoom: 11,
-      events: {
-        click: function(mapModel, eventName, originalEventArgs) {
-          alert('action done');
-        }
-      }
-    };
-    $scope.marker = {};
-    $scope.fakeMarkers = [
-      {
-        id: 2,
-        name: 'user-2',
-        coords: {
-          latitude: 48.8967513,
-          longitude: 2.302947
+      $scope.map = {
+        center: {
+          latitude: 48.8883984,
+          longitude: 2.2889508
         },
-        options: {
-          draggable: false,
-          title: 'user-2'
-        },
+        zoom: 11,
         events: {
           click: function(mapModel, eventName, originalEventArgs) {
-            console.debug('mapModel', mapModel);
-            console.debug('eventName', eventName);
-            console.debug('originalEventArgs', originalEventArgs);
-          }
-        },
-        info: {
-          options: {
-            content: 'user : user-2'
+            alert('action done');
           }
         }
-      },
-      {
-        id: 3,
-        name: 'user-3',
-        coords: {
-          latitude: 48.7967513,
-          longitude: 2.298547
-        },
-        options: {
-          draggable: false,
-          title: 'user-3'
-        },
-        info: {
+      };
+      $scope.marker = {};
+      $scope.fakeMarkers = [
+        {
+          id: 2,
+          name: 'user-2',
+          coords: {
+            latitude: 48.8967513,
+            longitude: 2.302947
+          },
           options: {
-            content: 'user : user-3'
-          }
-        }
-      }
-    ];
-
-    var init = function() {
-
-      ChatRoomService.getUsers($routeParams.room).success(function(res) {
-        console.debug(res);
-      }).error(function(err) {
-        console.error(err);
-      });
-
-      if (navigator.geolocation) {
-        //console.debug('navigator.geolocation?:', navigator.geolocation);
-        navigator.geolocation.getCurrentPosition(function(position) {
-          console.debug('position.coords.latitude:', position.coords.latitude);
-          console.debug('position.coords.longitude:', position.coords.longitude);
-          $scope.map.center.latitude = position.coords.latitude;
-          $scope.map.center.longitude = position.coords.longitude;
-          $scope.marker = {
-            id: 1,
-            coords: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            },
-            options: {
-              draggable: false,
-              title: $scope.model.name
-            },
-            info: {
-              options: {
-                content: 'user : ' + $scope.model.name
-              }
+            draggable: false,
+            title: 'user-2'
+          },
+          events: {
+            click: function(mapModel, eventName, originalEventArgs) {
+              console.debug('mapModel', mapModel);
+              console.debug('eventName', eventName);
+              console.debug('originalEventArgs', originalEventArgs);
             }
-          };
-          //var pos = maps.LatLng(position.coords.latitude, position.coords.longitude);
-        });
-      }
-    };
+          },
+          info: {
+            options: {
+              content: 'user : user-2'
+            }
+          }
+        },
+        {
+          id: 3,
+          name: 'user-3',
+          coords: {
+            latitude: 48.7967513,
+            longitude: 2.298547
+          },
+          options: {
+            draggable: false,
+            title: 'user-3'
+          },
+          info: {
+            options: {
+              content: 'user : user-3'
+            }
+          }
+        }
+      ];
 
-    init();
+      var init = function() {
 
-    var socket;
+        $interval(function() {
+          ChatRoomService.getUsers($routeParams.room).success(function(res) {
+            $scope.users = res;
+          }).error(function(err) {
+            console.error(err);
+          });
+        }, 5000);
 
-    var request = {
-      url: '/ws/chat/' + $scope.model.room,
-      contentType: 'application/json',
-      transport: 'websocket',
-      trackMessageLength: true,
-      reconnectInterval: 5000,
-      enableXDR: true,
-      timeout: 3600000
-    };
+        if (navigator.geolocation) {
+          //console.debug('navigator.geolocation?:', navigator.geolocation);
+          navigator.geolocation.getCurrentPosition(function(position) {
+            console.debug('position.coords.latitude:', position.coords.latitude);
+            console.debug('position.coords.longitude:', position.coords.longitude);
+            $scope.$apply(function() {
+              $scope.map.center.latitude = position.coords.latitude;
+              $scope.map.center.longitude = position.coords.longitude;
+              $scope.marker = {
+                id: 1,
+                coords: {
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude
+                },
+                options: {
+                  draggable: false,
+                  title: $scope.model.name
+                },
+                info: {
+                  options: {
+                    content: 'user : ' + $scope.model.name
+                  }
+                }
+              };
+            });
+            //var pos = maps.LatLng(position.coords.latitude, position.coords.longitude);
+          });
+        }
+      };
 
-    request.onOpen = function(response) {
-      $scope.model.transport = response.transport;
-      $scope.model.connected = true;
-      $scope.model.content = 'Atmosphere connected using ' + response.transport;
-    };
+      //$scope.$on('$destroy', function() {
+      //  ChatRoomService.removeUser($scope.model.name, $scope.model.room);
+      //});
 
-    request.onClientTimeout = function() {
-      $scope.model.content = 'Client closed the connection after a timeout. Reconnecting in ' + request.reconnectInterval;
-      $scope.model.connected = false;
-      setTimeout(function() {
-        socket = AtmosphereService.subscribe(request);
-      }, request.reconnectInterval);
-    };
+      init();
 
-    request.onReopen = function(response) {
-      $scope.model.connected = true;
-      $scope.model.content = 'Atmosphere re-connected using ' + response.transport;
-    };
+      var socket;
 
-    request.onMessage = function(response) {
-      function parseMessage(msg) {
-        var date = typeof(msg.time) === 'string' ? parseInt(msg.time) : msg.time;
-        $scope.model.messages.push({
-          author: msg.author,
-          date: new Date(date),
-          text: msg.message
-        });
-      }
+      var request = {
+        url: '/ws/chat/' + $scope.model.room,
+        contentType: 'application/json',
+        transport: 'websocket',
+        trackMessageLength: true,
+        reconnectInterval: 5000,
+        enableXDR: true,
+        timeout: 3600000
+      };
 
-      var responseText = response.responseBody;
-      var message = atmosphere.util.parseJSON(responseText);
-      if (Array.isArray(message)) {
-        message.map(function(msg) {
-          parseMessage(msg);
-        });
-      } else {
-        parseMessage(message);
-      }
-    };
+      request.onOpen = function(response) {
+        console.debug(response);
+        ChatRoomService.addUserToRoom($scope.model.name, response.request.uuid, $routeParams.room);
+        $scope.model.transport = response.transport;
+        $scope.model.connected = true;
+        $scope.model.content = 'Atmosphere connected using ' + response.transport;
+      };
 
-    request.onClose = function() {
-      $scope.model.connected = false;
-      $scope.model.content = 'Server closed the connection after a timeout';
-    };
+      request.onClientTimeout = function() {
+        $scope.model.content = 'Client closed the connection after a timeout. Reconnecting in ' + request.reconnectInterval;
+        $scope.model.connected = false;
+        setTimeout(function() {
+          socket = AtmosphereService.subscribe(request);
+        }, request.reconnectInterval);
+      };
 
-    request.onError = function() {
-      $scope.model.content = 'Sorry, but there\'s some problem with your socket or the server is down';
-    };
+      request.onReopen = function(response) {
+        $scope.model.connected = true;
+        $scope.model.content = 'Atmosphere re-connected using ' + response.transport;
+      };
 
-    request.onReconnect = function(request) {
-      $scope.model.content = 'Connection lost. Trying to reconnect ' + request.reconnectInterval;
-      $scope.model.connected = false;
-    };
+      request.onMessage = function(response) {
+        function parseMessage(msg) {
+          var date = typeof(msg.time) === 'string' ? parseInt(msg.time) : msg.time;
+          $scope.model.messages.push({
+            author: msg.author,
+            date: new Date(date),
+            text: msg.message
+          });
+        }
 
-    socket = AtmosphereService.subscribe(request);
+        var responseText = response.responseBody;
+        var message = atmosphere.util.parseJSON(responseText);
+        if (Array.isArray(message)) {
+          message.map(function(msg) {
+            parseMessage(msg);
+          });
+        } else {
+          parseMessage(message);
+        }
+      };
 
-    $scope.keypress = function(event) {
-      if (!!$scope.model.message && $scope.model.message.length > 0 && event.keyCode === 13) {
-        socket.push(atmosphere.util.stringifyJSON({
-          author: $scope.model.name,
-          message: $scope.model.message
-        }));
-        $scope.model.message = '';
-      }
-    };
-  }]);
+      request.onClose = function() {
+        $scope.model.connected = false;
+        $scope.model.content = 'Server closed the connection after a timeout';
+      };
+
+      request.onError = function() {
+        $scope.model.content = 'Sorry, but there\'s some problem with your socket or the server is down';
+      };
+
+      request.onReconnect = function(request) {
+        $scope.model.content = 'Connection lost. Trying to reconnect ' + request.reconnectInterval;
+        $scope.model.connected = false;
+      };
+
+      socket = AtmosphereService.subscribe(request);
+
+      $scope.keypress = function(event) {
+        if (!!$scope.model.message && $scope.model.message.length > 0 && event.keyCode === 13) {
+          socket.push(atmosphere.util.stringifyJSON({
+            author: $scope.model.name,
+            message: $scope.model.message
+          }));
+          $scope.model.message = '';
+        }
+      };
+    }]);
 
   controllersModule.controller('ChatRoomChoiceController', ['$scope', 'UserService', 'ChatRoomService', function($scope, UserService, ChatRoomService) {
     function isEnterOrMouseFirstButton(e) {
@@ -205,7 +215,7 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
       });
     }
 
-    UserService.getUser();
+    $scope.user = UserService.getUser();
     initRooms();
 
     $scope.createRoom = function(event) {

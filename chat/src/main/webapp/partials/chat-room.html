@@ -51,8 +51,11 @@
       </ui-gmap-google-map>
     </div>
     <div class="col-xs-12 col-md-2">
-      <ul>
-        <li>{{model.name}}</li>
+      <!--<ul>-->
+        <!--<li>{{model.name}}</li>-->
+      <!--</ul>-->
+      <ul ng-repeat="user in users">
+        <li ng-bind="user.username"></li>
       </ul>
       <ul ng-repeat="fakeMarker in fakeMarkers">
         <li ng-bind="fakeMarker.name"></li>

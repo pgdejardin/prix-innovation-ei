@@ -33,6 +33,7 @@ public class Chat {
       logger.info("Browser {} unexpectedly disconnected", event.getResource().uuid());
     else if (event.isClosedByClient())
       logger.info("Browser {} closed the connection", event.getResource().uuid());
+    cache.removeUserToRoom(chatroomName, event.getResource().uuid());
   }
 
   @Message(encoders = {ChatMessageEncoder.class}, decoders = {ChatMessageDecoder.class})
