@@ -117,9 +117,10 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
         }
       };
 
-      //$scope.$on('$destroy', function() {
-      //  ChatRoomService.removeUser($scope.model.name, $scope.model.room);
-      //});
+      $scope.$on('$destroy', function() {
+        //ChatRoomService.removeUser($scope.model.name, $scope.model.room);
+        AtmosphereService.unsubscribe();
+      });
 
       init();
 
