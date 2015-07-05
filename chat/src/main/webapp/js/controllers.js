@@ -8,10 +8,6 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
   controllersModule.controller('ChatRoomController', ['$scope', '$routeParams', '$interval', 'uiGmapGoogleMapApi', 'UserService', 'AtmosphereService', 'ChatRoomService',
     function($scope, $routeParams, $interval, uiGmapGoogleMapApi, UserService, AtmosphereService, ChatRoomService) {
 
-      //uiGmapGoogleMapApi.then(function(maps) {
-      //
-      //});
-
       $scope.model = {
         room: $routeParams.room,
         name: UserService.getUser(),
@@ -32,7 +28,6 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
           }
         }
       };
-      $scope.marker = {};
       $scope.fakeMarkers = [
         {
           id: 2,
@@ -76,56 +71,51 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
           }
         }
       ];
+      $scope.markers = angular.extend([], $scope.fakeMarkers);
 
       var init = function() {
-
-        $interval(function() {
-          ChatRoomService.getUsers($routeParams.room).success(function(res) {
+        function getUsers() {
+          ChatRoomService.getUsers($routeParams.room).success(function (res) {
             $scope.users = res;
-          }).error(function(err) {
+          }).error(function (err) {
             console.error(err);
           });
+        }
+        $interval(function() {
+          getUsers();
         }, 5000);
+        getUsers();
 
         if (navigator.geolocation) {
-          //console.debug('navigator.geolocation?:', navigator.geolocation);
           navigator.geolocation.getCurrentPosition(function(position) {
-            console.debug('position.coords.latitude:', position.coords.latitude);
-            console.debug('position.coords.longitude:', position.coords.longitude);
-            $scope.$apply(function() {
-              $scope.map.center.latitude = position.coords.latitude;
-              $scope.map.center.longitude = position.coords.longitude;
-              $scope.marker = {
-                id: 1,
-                coords: {
-                  latitude: position.coords.latitude,
-                  longitude: position.coords.longitude
-                },
+            $scope.map.center.latitude = position.coords.latitude;
+            $scope.map.center.longitude = position.coords.longitude;
+            var marker = {
+              id: 1,
+              coords: {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+              },
+              options: {
+                draggable: false,
+                title: $scope.model.name
+              },
+              info: {
                 options: {
-                  draggable: false,
-                  title: $scope.model.name
-                },
-                info: {
-                  options: {
-                    content: 'user : ' + $scope.model.name
-                  }
+                  content: 'user : ' + $scope.model.name
                 }
-              };
-            });
-            //var pos = maps.LatLng(position.coords.latitude, position.coords.longitude);
+              }
+            };
+            $scope.markers.push(marker);
           });
         }
       };
 
       $scope.$on('$destroy', function() {
-        //ChatRoomService.removeUser($scope.model.name, $scope.model.room);
         AtmosphereService.unsubscribe();
       });
 
-      init();
-
       var socket;
-
       var request = {
         url: '/ws/chat/' + $scope.model.room,
         contentType: 'application/json',
@@ -137,8 +127,8 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
       };
 
       request.onOpen = function(response) {
-        console.debug(response);
         ChatRoomService.addUserToRoom($scope.model.name, response.request.uuid, $routeParams.room);
+        init();
         $scope.model.transport = response.transport;
         $scope.model.connected = true;
         $scope.model.content = 'Atmosphere connected using ' + response.transport;
@@ -203,7 +193,8 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
           $scope.model.message = '';
         }
       };
-    }]);
+    }
+  ]);
 
   controllersModule.controller('ChatRoomChoiceController', ['$scope', 'UserService', 'ChatRoomService', function($scope, UserService, ChatRoomService) {
     function isEnterOrMouseFirstButton(e) {
