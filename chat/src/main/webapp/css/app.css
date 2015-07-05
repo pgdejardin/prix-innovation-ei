@@ -9,3 +9,8 @@
 .angular-google-map-container {
   height: 400px;
 }
+
+.chat-panel .panel-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
