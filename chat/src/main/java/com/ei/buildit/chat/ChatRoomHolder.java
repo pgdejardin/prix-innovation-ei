@@ -1,5 +1,8 @@
 package com.ei.buildit.chat;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 import java.util.*;
 
 public class ChatRoomHolder {
@@ -65,6 +68,24 @@ public class ChatRoomHolder {
     ChatRoom chatRoom = getChatRoom(roomName);
     if (chatRoom != null) {
       chatRoom.getUsers().remove(new User(uuid));
+    }
+  }
+
+  public void updateUserGeoloc(String room, final User user) throws IllegalStateException {
+    ChatRoom chatRoom = getChatRoom(room);
+    if (chatRoom != null) {
+      User userFromList = FluentIterable
+        .from(chatRoom.getUsers())
+        .filter(new Predicate<User>() {
+          @Override
+          public boolean apply(User input) {
+            return input.equals(user);
+          }
+        })
+        .first()
+        .get();
+      userFromList.setLatitude(user.getLatitude());
+      userFromList.setLongitude(user.getLongitude());
     }
   }
 }

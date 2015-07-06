@@ -64,12 +64,15 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
       //removeUser: function(userName, roomName) {
       //  return $http.post('/rest/chat-room/' + roomName + '/remove', {username: userName} )
       //},
-      addUserToRoom: function(userName, uuid, roomName) {
-        return $http.post('/rest/chat-room/' + roomName + '/user', {uuid:uuid, username: userName});
-      },
-      updateUserToRoom: function(userName, roomName) {
-        return $http.post('/rest/chat-room/' + roomName + '/update', {username: userName});
+      //addUserToRoom: function(userName, uuid, roomName) {
+      //  return $http.post('/rest/chat-room/' + roomName + '/user', {uuid:uuid, username: userName});
+      //},
+      addUserToRoom2: function(user, roomName) {
+        return $http.post('/rest/chat-room/' + roomName + '/user', user);
       }
+      //updateGeoloc: function(lat, long, uuid, roomName) {
+      //  return $http.put('/rest/chat-room/' + roomName + '/user/geoloc', {uuid: uuid, latitude: lat, longitude: long});
+      //}
     };
   }]);
 

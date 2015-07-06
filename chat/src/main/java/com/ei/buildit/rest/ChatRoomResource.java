@@ -3,6 +3,8 @@ package com.ei.buildit.rest;
 import com.ei.buildit.chat.ChatRoom;
 import com.ei.buildit.chat.ChatRoomHolder;
 import com.ei.buildit.chat.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -14,6 +16,9 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ChatRoomResource {
+
+  private static final Logger logger = LoggerFactory.getLogger(ChatRoomResource.class);
+
   private static final ChatRoomHolder cache = ChatRoomHolder.getInstance();
 
   @GET
@@ -47,4 +52,15 @@ public class ChatRoomResource {
 //    return Response.ok().build();
 //  }
 
+  @PUT
+  @Path("/{room}/user/geoloc")
+  public Response updateUserGeoLoc(@PathParam("room") String room, User user) {
+    try {
+      cache.updateUserGeoloc(room, user);
+      return Response.ok().build();
+    } catch (IllegalStateException e) {
+      logger.error("Pas bon!!!", e.getMessage());
+      return Response.serverError().build();
+    }
+  }
 }
