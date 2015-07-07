@@ -6,8 +6,8 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
   var controllersModule = angular.module('myApp.controllers', []);
 
   controllersModule.controller('ChatRoomController', ['$scope', '$routeParams', '$interval', 'uiGmapGoogleMapApi', 'UserService',
-    'AtmosphereService', 'ChatRoomService',
-    function ($scope, $routeParams, $interval, uiGmapGoogleMapApi, UserService, AtmosphereService, ChatRoomService) {
+    'AtmosphereService', 'ChatRoomService', '$timeout',
+    function ($scope, $routeParams, $interval, uiGmapGoogleMapApi, UserService, AtmosphereService, ChatRoomService, $timeout) {
 
       $scope.model = {
         room: $routeParams.room,
@@ -45,9 +45,9 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
           },
           events: {
             click: function (mapModel, eventName, originalEventArgs) {
-              console.debug('mapModel', mapModel);
-              console.debug('eventName', eventName);
-              console.debug('originalEventArgs', originalEventArgs);
+              //console.debug('mapModel', mapModel);
+              //console.debug('eventName', eventName);
+              //console.debug('originalEventArgs', originalEventArgs);
             }
           },
           info: {
@@ -70,6 +70,40 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
           info: {
             options: {
               content: 'user : user-3' + '<br>' + 'latitude: 48.7967513' + '<br>' + 'longitude: 2.298547'
+            }
+          }
+        },
+        {
+          id: 4,
+          name: 'user-4',
+          coords: {
+            latitude: 48.7467217,
+            longitude: 2.288497
+          },
+          options: {
+            draggable: false,
+            title: 'user-4'
+          },
+          info: {
+            options: {
+              content: 'user : user-4' + '<br>' + 'latitude: 48.7967217' + '<br>' + 'longitude: 2.298497'
+            }
+          }
+        },
+        {
+          id: 5,
+          name: 'user-5',
+          coords: {
+            latitude: 48.8270041,
+            longitude: 2.309285
+          },
+          options: {
+            draggable: false,
+            title: 'user-5'
+          },
+          info: {
+            options: {
+              content: 'user : user-5' + '<br>' + 'latitude: 48.7970041' + '<br>' + 'longitude: 2.299285'
             }
           }
         }
@@ -121,17 +155,6 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
         }
       };
 
-      //var updateGeoloc = function () {
-      //  if (!_.isNull($scope.model.loc)) {
-      //    ChatRoomService.updateGeoloc($scope.model.loc.lat, $scope.model.loc.long, $scope.model.uuid, $scope.model.room)
-      //      .success(function () {
-      //      })
-      //      .error(function (err) {
-      //        console.error(err);
-      //      });
-      //  }
-      //};
-
       var addUserToRoom = function () {
         if (!_.isNull($scope.model.loc)) {
           ChatRoomService.addUserToRoom2({
@@ -161,8 +184,6 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
       request.onOpen = function (response) {
         $scope.model.uuid = response.request.uuid;
         init();
-        //ChatRoomService.addUserToRoom($scope.model.name, $scope.model.uuid, $routeParams.room);
-        //updateGeoloc();
         $scope.model.transport = response.transport;
         $scope.model.connected = true;
         $scope.model.content = 'Atmosphere connected using ' + response.transport;
@@ -200,6 +221,10 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
         } else {
           parseMessage(message);
         }
+        $timeout(function () {
+          var objDiv = document.getElementById('messages');
+          objDiv.scrollTop = objDiv.scrollHeight;
+        }, 100)
       };
 
       request.onClose = function () {

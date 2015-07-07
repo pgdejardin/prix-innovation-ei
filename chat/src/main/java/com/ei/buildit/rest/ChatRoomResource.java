@@ -10,7 +10,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
-import java.util.List;
 
 @Path("/chat-room")
 @Produces(MediaType.APPLICATION_JSON)
