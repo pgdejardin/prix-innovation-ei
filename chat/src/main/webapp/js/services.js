@@ -53,25 +53,25 @@ define(['angular', 'atmosphere'], function(angular, atmosphere) {
   services.service('ChatRoomService', ['$http', function($http) {
     return {
       getRooms: function() {
-        return $http.get('/rest/chat-room', {responseType: 'json'});
+        return $http.get('rest/chat-room', {responseType: 'json'});
       },
       createRoom: function(roomName) {
-        return $http.put('/rest/chat-room/' + roomName, null, {responseType: 'json'});
+        return $http.put('rest/chat-room/' + roomName, null, {responseType: 'json'});
       },
       getUsers: function(roomName) {
-        return $http.get('/rest/chat-room/' + roomName + '/users');
+        return $http.get('rest/chat-room/' + roomName + '/users');
       },
       //removeUser: function(userName, roomName) {
-      //  return $http.post('/rest/chat-room/' + roomName + '/remove', {username: userName} )
+      //  return $http.post('rest/chat-room/' + roomName + '/remove', {username: userName} )
       //},
       //addUserToRoom: function(userName, uuid, roomName) {
-      //  return $http.post('/rest/chat-room/' + roomName + '/user', {uuid:uuid, username: userName});
+      //  return $http.post('rest/chat-room/' + roomName + '/user', {uuid:uuid, username: userName});
       //},
       addUserToRoom2: function(user, roomName) {
-        return $http.post('/rest/chat-room/' + roomName + '/user', user);
+        return $http.post('rest/chat-room/' + roomName + '/user', user);
       }
       //updateGeoloc: function(lat, long, uuid, roomName) {
-      //  return $http.put('/rest/chat-room/' + roomName + '/user/geoloc', {uuid: uuid, latitude: lat, longitude: long});
+      //  return $http.put('rest/chat-room/' + roomName + '/user/geoloc', {uuid: uuid, latitude: lat, longitude: long});
       //}
     };
   }]);

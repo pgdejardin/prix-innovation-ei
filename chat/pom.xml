@@ -86,6 +86,7 @@
         <configuration>
           <webAppConfig>
             <defaultsDescriptor>${project.basedir}/src/etc/jetty/webdefault.xml</defaultsDescriptor>
+            <contextPath>/buildit-chat</contextPath>
           </webAppConfig>
           <httpConnector>
             <port>${jetty-port}</port>

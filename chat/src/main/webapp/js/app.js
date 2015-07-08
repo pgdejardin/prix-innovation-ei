@@ -2,13 +2,13 @@
 
 requirejs.config({
     paths: {
-        'angular': ['/javascript/angular.min'],
-        'angular-route': ['/javascript/angular-route.min'],
-        'jquery': ['/javascript/jquery-2.1.4.min'],
-        'bootstrap': ['/javascript/bootstrap.min'],
-        'atmosphere': ['/javascript/atmosphere-min'],
-        'lodash':['/bower_components/lodash/lodash.min'],
-        'angular-google-maps': ['/bower_components/angular-google-maps/dist/angular-google-maps.min']
+        'angular': ['../javascript/angular.min'],
+        'angular-route': ['../javascript/angular-route.min'],
+        'jquery': ['../javascript/jquery-2.1.4.min'],
+        'bootstrap': ['../javascript/bootstrap.min'],
+        'atmosphere': ['../javascript/atmosphere-min'],
+        'lodash':['../bower_components/lodash/lodash.min'],
+        'angular-google-maps': ['../bower_components/angular-google-maps/dist/angular-google-maps.min']
     },
     shim: {
         'angular': {

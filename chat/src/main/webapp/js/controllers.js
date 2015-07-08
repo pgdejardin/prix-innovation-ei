@@ -34,76 +34,77 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
       $scope.fakeMarkers = [
         {
           id: 2,
-          name: 'user-2',
+          real: false,
+          name: 'Gilles',
           coords: {
             latitude: 48.8967513,
             longitude: 2.302947
           },
           options: {
             draggable: false,
-            title: 'user-2'
+            title: 'Gilles'
           },
           events: {
             click: function (mapModel, eventName, originalEventArgs) {
-              //console.debug('mapModel', mapModel);
-              //console.debug('eventName', eventName);
-              //console.debug('originalEventArgs', originalEventArgs);
             }
           },
           info: {
             options: {
-              content: 'user : user-2' + '<br>' + 'latitude: 48.8967513' + '<br>' + 'longitude: 2.302947'
+              content: 'user : Gilles' + '<br>' + 'latitude: 48.8967513' + '<br>' + 'longitude: 2.302947'
             }
           }
         },
         {
           id: 3,
-          name: 'user-3',
+          real: false,
+          name: 'Paul-Guillaume',
           coords: {
             latitude: 48.7967513,
             longitude: 2.298547
           },
           options: {
             draggable: false,
-            title: 'user-3'
+            title: 'Paul-Guillaume'
           },
           info: {
             options: {
-              content: 'user : user-3' + '<br>' + 'latitude: 48.7967513' + '<br>' + 'longitude: 2.298547'
+              content: 'user : Paul-Guillaume' + '<br>' + 'latitude: 48.7967513' + '<br>' + 'longitude: 2.298547'
             }
           }
         },
         {
           id: 4,
-          name: 'user-4',
+          real: false,
+          name: 'Brice',
           coords: {
             latitude: 48.7467217,
             longitude: 2.288497
           },
           options: {
             draggable: false,
-            title: 'user-4'
+            title: 'Brice'
           },
           info: {
             options: {
-              content: 'user : user-4' + '<br>' + 'latitude: 48.7967217' + '<br>' + 'longitude: 2.298497'
+              content: 'user : Brice' + '<br>' + 'latitude: 48.7967217' + '<br>' + 'longitude: 2.298497'
             }
           }
         },
         {
           id: 5,
-          name: 'user-5',
+          real: false,
+          name: 'Michel',
           coords: {
             latitude: 48.8270041,
             longitude: 2.309285
           },
           options: {
             draggable: false,
-            title: 'user-5'
+            title: 'Michel'
           },
           info: {
             options: {
-              content: 'user : user-5' + '<br>' + 'latitude: 48.7970041' + '<br>' + 'longitude: 2.299285'
+              content: 'user : Michel' + '<br>' + 'latitude: 48.7970041' + '<br>' + 'longitude: 2.299285'
             }
           }
         }
@@ -114,6 +115,29 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
         function getUsers() {
           ChatRoomService.getUsers($routeParams.room).success(function (res) {
             $scope.users = res;
+            $scope.markers = $scope.markers.filter(function(marker) {
+              return marker.real === false;
+            });
+            res.forEach(function(item) {
+              $scope.markers.push({
+                id: item.uuid,
+                real: true,
+                name: item.username,
+                coords: {
+                  latitude: item.latitude + 0.00000001,
+                  longitude: item.longitude + 0.00000001
+                },
+                options: {
+                  draggable: false,
+                  title: item.username
+                },
+                info: {
+                  options: {
+                    content: 'user: ' + item.username + '<br>' + 'latitude: ' + item.latitude + '<br>' + 'longitude: ' + item.longitude
+                  }
+                }
+              });
+            });
           }).error(function (err) {
             console.error(err);
           });
@@ -133,24 +157,6 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
               long: position.coords.longitude
             };
             addUserToRoom();
-            var marker = {
-              id: 1,
-              coords: {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude
-              },
-              options: {
-                draggable: false,
-                title: $scope.model.name
-              },
-              info: {
-                options: {
-                  content: 'user : ' + $scope.model.name + '<br>' + 'latitude: ' + position.coords.latitude + '<br>' + 'longitude: ' +
-                  position.coords.longitude
-                }
-              }
-            };
-            $scope.markers.push(marker);
           });
         }
       };
@@ -172,7 +178,7 @@ define(['angular', 'atmosphere'], function (angular, atmosphere) {
 
       var socket;
       var request = {
-        url: '/ws/chat/' + $scope.model.room,
+        url: 'ws/chat/' + $scope.model.room,
         contentType: 'application/json',
         transport: 'websocket',
         trackMessageLength: true,
